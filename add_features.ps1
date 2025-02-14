@@ -19,6 +19,19 @@ if ($IsAdmin.IsInRole($IsAdminRole)) {
     }
 }
 
+# Introduction
+$confirmation = Read-Host "Do you want to read the introduction? (Y/N)"
+if ($confirmation -eq 'Y') {
+    $introduction = @"
+        The script restores features that were disabled by the remove_features script.
+        SMB1 features must be restored using the source file from the ISO image.
+"@
+Write-Host $introduction
+Write-Host ""
+}else {
+    Write-Host ""
+}
+
 # Hyper-V Enable
 Write-Host "This script will enable Hyper-V features:" -ForegroundColor Cyan
 Write-Host "1. Hyper-V"
@@ -27,7 +40,7 @@ Write-Host "3. DiskIo-QoS"
 Write-Host ""
 
 $confirmation = Read-Host "Are you sure you want to enable these Hyper-V features (Y/N)?"
-
+Write-Host ""
 if ($confirmation -eq 'Y') {
     Write-Host "Checking processor compatibility for Hyper-V..." -ForegroundColor Cyan
     $processor = Get-WmiObject Win32_Processor | Select-Object -First 1 Name, VirtualizationFirmwareEnabled, SecondLevelAddressTranslationExtensions
@@ -51,26 +64,37 @@ if ($confirmation -eq 'Y') {
     Write-Host ""
 }
 
-# Internet Explorer Enable
+
+# Internet Explorer Enabled
 Write-Host "This script will enable Internet Explorer features:" -ForegroundColor Cyan
 $confirmation = Read-Host "Are you sure you want to enable Internet Explorer features (Y/N)?"
-if ($confirmation -eq 'Y') {
-    Write-Host "enabling Internet Explorer:" -ForegroundColor Cyan
-    dism.exe /online /enable-feature /featurename:Internet-Explorer-Optional-amd64
-    Write-Host "Internet Explorer features have been processed." -ForegroundColor Green
-    Write-Host ""
+Write-Host ""
+if ($confirmation -eq 'Y' -or $confirmation -eq 'y') {
+    Write-Host "Checking compatibility for Internet Explorer..." -ForegroundColor Cyan
+    $ieFeature = Get-WindowsOptionalFeature -Online | Where-Object FeatureName -Like "Internet-Explorer-*"
+    if ($ieFeature.State -eq "Disabled") {
+        Write-Host "Enabling Internet Explorer..." -ForegroundColor Cyan
+        dism.exe /online /enable-feature /featurename:Internet-Explorer-Optional-amd64
+        Write-Host "Internet Explorer features have been processed." -ForegroundColor Green
+    } elseif ($ieFeature.State -eq "Enabled") {
+        Write-Host "Internet Explorer is already enabled." -ForegroundColor Green
+    } else {
+        Write-Host "Internet Explorer is not supported on this system." -ForegroundCnolor Yellow
+    }
 } else {
-    Write-Host "Internet Explorer features were not enabled." -ForegroundColor Yellow
-    Write-Host ""
+    Write-Host "Internet Explorer was not enabled." -ForegroundColor Yellow
+    Write-Host""
 }
 
-# Prompt user if they want to restart the computer
-$restart = Read-Host "Do you want to restart the computer? (Y/N)"
+# Prompt user if they want to restart the server
+$restart = Read-Host "Restart to apply changes. Do you want to restart the server now? (Y/N)" 
 
 if ($restart -eq "Y" -or $restart -eq "y") {
-    # Restart the computer
+    # Restart the server
     Shutdown.exe /r /f /t 5
-    Write-Host "The computer is restarting..." -ForegroundColor Green
+    Write-Host ""
+    Write-Host "The server is restarting..." -ForegroundColor Green
 } else {
     exit
 }
+
