@@ -1,8 +1,4 @@
-<#
-ACS DATA SYSTEMS
-# dev: Claudia Cifaldi - PS Onsite Thiene
-# last update: february 2025
-#>
+# dev:@cla-cif updated: february 2025
 
 # Check if running as Administrator
 $IsAdmin = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
