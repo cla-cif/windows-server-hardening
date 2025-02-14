@@ -19,6 +19,22 @@ if ($IsAdmin.IsInRole($IsAdminRole)) {
     }
 }
 
+# Introduction
+$confirmation = Read-Host "Do you want to read the introduction? (Y/N)"
+if ($confirmation -eq 'Y') {
+    $introduction = @"
+        The script removes obsolete features that may already be absent in the latest Windows Server versions.
+        Pay attention to the future destinations of this server as the hardening commands disable 
+        components that might be required, such as Hyper-V or those needed to run pre-2008 applications.
+        To restore any removed components, refer to the script add_features.
+        Additionally the script will install useful Windows Features. 
+"@
+Write-Host $introduction
+Write-Host ""
+}else {
+    Write-Host ""
+}
+
 # Admin section starts here
 Write-Host "This script will remove the following features:" -ForegroundColor Cyan
 Write-Host "01. WINS"
@@ -41,35 +57,35 @@ Write-Host ""
 $confirmation = Read-Host "Are you sure you want to remove these features (Y/N)?"
 if ($confirmation -eq 'Y') {
     Write-Host ""
-    Write-Host "removing wins:" -ForegroundColor Cyan
+    Write-Host "removing wins..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name wins -IncludeManagementTools -Remove
-    Write-Host "removing HostGuardianServiceRole:" -ForegroundColor Cyan
+    Write-Host "removing HostGuardianServiceRole..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name HostGuardianServiceRole -IncludeManagementTools -Remove
-    Write-Host "removing Multipath-IO:" -ForegroundColor Cyan
+    Write-Host "removing Multipath-IO..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name Multipath-IO -IncludeManagementTools -Remove
-    Write-Host "removing IPAM:" -ForegroundColor Cyan
+    Write-Host "removing IPAM..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name IPAM -IncludeManagementTools -Remove
-    Write-Host "removing ISNS:" -ForegroundColor Cyan
+    Write-Host "removing ISNS..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name ISNS -IncludeManagementTools -Remove
-    Write-Host "removing MSMQ:" -ForegroundColor Cyan
+    Write-Host "removing MSMQ..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name MSMQ -IncludeManagementTools -Remove
-    Write-Host "removing Containers:" -ForegroundColor Cyan
+    Write-Host "removing Containers..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name Containers -IncludeManagementTools -Remove
-    Write-Host "removing Migration:" -ForegroundColor Cyan
+    Write-Host "removing Migration..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name Migration -IncludeManagementTools -Remove
-    Write-Host "removing FAX:" -ForegroundColor Cyan
+    Write-Host "removing FAX..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name FAX -IncludeManagementTools -Remove
-    Write-Host "removing Wireless-Networking:" -ForegroundColor Cyan
+    Write-Host "removing Wireless-Networking..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name Wireless-Networking -IncludeManagementTools -Remove
-    Write-Host "removing MS Windows Subsystem Linux:" -ForegroundColor Cyan
+    Write-Host "removing MS Windows Subsystem Linux..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name Microsoft-Windows-Subsystem-Linux -IncludeManagementTools -Remove
-    Write-Host "removing SMS:" -ForegroundColor Cyan
+    Write-Host "removing SMS..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name SMS -IncludeManagementTools -Remove
-    Write-Host "removing SMS Proxy:" -ForegroundColor Cyan
+    Write-Host "removing SMS Proxy..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name SMS-Proxy -IncludeManagementTools -Remove
-    Write-Host "removing Storage Replica:" -ForegroundColor Cyan
+    Write-Host "removing Storage Replica..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name Storage-Replica -IncludeManagementTools -Remove
-    Write-Host "removing SMTP-server:" -ForegroundColor Cyan
+    Write-Host "removing SMTP-server..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name smtp-server -IncludeManagementTools -Remove
     
     Write-Host "All selected features have been processed." -ForegroundColor Green
@@ -88,11 +104,11 @@ Write-Host ""
 
 $confirmation = Read-Host "Are you sure you want to remove these Hyper-V features (Y/N)?"
 if ($confirmation -eq 'Y') {
-     Write-Host "removing Hyper-V:" -ForegroundColor Cyan
+     Write-Host "removing Hyper-V..." -ForegroundColor Cyan
      Remove-WindowsFeature -Name Hyper-V -IncludeManagementTools -Remove
-     Write-Host "removing Fabric Shielded Tools:" -ForegroundColor Cyan
+     Write-Host "removing Fabric Shielded Tools..." -ForegroundColor Cyan
      Remove-WindowsFeature -Name FabricShieldedTools -IncludeManagementTools -Remove
-     Write-Host "removing DiskIo Qos:" -ForegroundColor Cyan
+     Write-Host "removing DiskIo Qos..." -ForegroundColor Cyan
      Remove-WindowsFeature -Name DiskIo-QoS -IncludeManagementTools -Remove
 
     Write-Host "Hyper-V features have been processed." -ForegroundColor Green
@@ -106,7 +122,7 @@ if ($confirmation -eq 'Y') {
 Write-Host "This script will remove SMB1 features:" -ForegroundColor Cyan
 $confirmation = Read-Host "Are you sure you want to remove the SMB1 features (Y/N)?"
 if ($confirmation -eq 'Y') {
-    Write-Host "removing SMB1:" -ForegroundColor Cyan
+    Write-Host "removing SMB1..." -ForegroundColor Cyan
     Remove-WindowsFeature -Name FS-SMB1 -IncludeManagementTools -Remove
     Write-Host "SMB1 features have been processed." -ForegroundColor Green
     Write-Host ""
@@ -119,7 +135,7 @@ if ($confirmation -eq 'Y') {
 Write-Host "This script will disable Internet Explorer features:" -ForegroundColor Cyan
 $confirmation = Read-Host "Are you sure you want to disable Internet Explorer features (Y/N)?"
 if ($confirmation -eq 'Y') {
-    Write-Host "disabling Internet Explorer:" -ForegroundColor Cyan
+    Write-Host "disabling Internet Explorer..." -ForegroundColor Cyan
     Disable-WindowsOptionalFeature -FeatureName Internet-Explorer-Optional-amd64 -Online -NoRestart
     Write-Host "Internet Explorer features have been processed." -ForegroundColor Green
     Write-Host ""
@@ -137,11 +153,11 @@ Write-Host ""
 
 $confirmation = Read-Host "Do you want to proceed with installing these features (Y/N)?"
 if ($confirmation -eq 'Y') {
-     Write-Host "installing Telnet Client:" -ForegroundColor Cyan
+     Write-Host "installing Telnet Client..." -ForegroundColor Cyan
      Add-WindowsFeature -Name Telnet-client -IncludeManagementTools
-     Write-Host "installing TFTP Client:" -ForegroundColor Cyan
+     Write-Host "installing TFTP Client..." -ForegroundColor Cyan
      Add-WindowsFeature -Name TFTP-client -IncludeManagementTools
-     Write-Host "installing .NET Framework:" -ForegroundColor Cyan
+     Write-Host "installing .NET Framework..." -ForegroundColor Cyan
      Add-WindowsFeature -Name NET-Framework-Core -IncludeManagementTools
      Write-Host "All selected features have been processed." -ForegroundColor Green
      Write-Host ""
@@ -169,7 +185,7 @@ if ($confirmation -eq 'Y') {
 }
 
 # Run PowerShell and DISM commands
-Write-Host "This script will execute PowerShell commands to modify the following parameters:" -ForegroundColor Cyan
+Write-Host "This script will modify the following settings:" -ForegroundColor Cyan
 Write-Host "01. Disable LMHOSTS"
 Write-Host "02. Disable Domain Name Devolution"
 Write-Host "03. ActiveSetup"
@@ -177,8 +193,10 @@ Write-Host "04. Unregister Automatic Device Join"
 Write-Host "05. Disable NetBIOS over TCP/IP"
 Write-Host "06. Enable NETAdapterRSS"
 Write-Host "07. Rename NETAdapter to LAN"
-Write-Host "08. Clean up disk space."
 Write-Host ""
+
+$confirmation = Read-Host "Do you want to proceed? (Y/N)"
+if ($confirmation -eq 'Y') {
 
 Write-Host "processing ..."-ForegroundColor Cyan
 Enable-PSRemoting -Force
@@ -197,26 +215,29 @@ Write-Host "enabling NETAdapterRSS..." -ForegroundColor Cyan
 Enable-NetAdapterRss -Name "Ethernet0"
 Write-Host "renaming NETAdapter to LAN..." -ForegroundColor Cyan
 Rename-NetAdapter -Name "Ethernet0" -NewName "LAN"
-Write-Host "cleaning up disk..." -ForegroundColor Cyan
-Dism.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase
 
 Write-Host "All commands have been processed." -ForegroundColor Green
 Write-Host ""
+} else {
+    Write-Host "No changes were made." -ForegroundColor Yellow
+    Write-Host ""
+}
 
 # Recap table of the Windows Features
-Write-Host "Install state of the features processed with this script" -ForegroundColor Cyan
+Write-Host "Install state of the features processed with this script:" -ForegroundColor Cyan
 @("wins", "HostGuardianServiceRole", "Multipath-IO", "IPAM", "ISNS", "MSMQ", "Containers", "Migration", "FAX", "Wireless-Networking", "Microsoft-Windows-Subsystem-Linux", "SMS", "SMS-Proxy", "Storage-Replica", "smtp-server", "FS-SMB1", "Hyper-V", "Telnet-client", "TFTP-client", "NET-Framework-Core") | 
     ForEach-Object { Get-WindowsFeature -Name $_ } | 
     Select-Object Name, InstallState | 
     Format-Table -AutoSize
 
-# Prompt user if they want to restart the computer
-$restart = Read-Host "Do you want to restart the computer? (Y/N)"
+# Prompt user if they want to restart the server
+$restart = Read-Host "Restart to apply changes. Do you want to restart the server now? (Y/N)" 
 
 if ($restart -eq "Y" -or $restart -eq "y") {
-    # Restart the computer
+    # Restart the server
     Shutdown.exe /r /f /t 5
-    Write-Host "The computer is restarting..." -ForegroundColor Green
+    Write-Host ""
+    Write-Host "The server is restarting..." -ForegroundColor Green
 } else {
     exit
 }
