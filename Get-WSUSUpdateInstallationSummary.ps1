@@ -4,15 +4,15 @@
 Import-Module UpdateServices
 
 # Connect to the WSUS Server
-$wsus = Get-WsusServer -Name "srvwsus.ani.it" -PortNumber 8530
+$wsus = Get-WsusServer -Name "wsusservername.domain.it" -PortNumber 8530
 
 # Email configuration
-$SMTPServer = "srvexchange01.ani.it"
+$SMTPServer = "mailservername.domain.it"
 $SMTPPort = 587
 #$SMTPUser = "your-email@yourdomain.com"
 #$SMTPPassword = "your-password"
-$From = "WSUS <wsus@ani.it>"
-$To = "Recipient Name <ced@ani.it>"
+$From = "WSUS <wsusservername@domain.it>"
+$To = "Recipient Name <recipient@domain.it>"
 $Subject = "WSUS Computer Status Report - $(Get-Date -Format yyyyMMdd)"
 
 # Initialize an array to store the report data
